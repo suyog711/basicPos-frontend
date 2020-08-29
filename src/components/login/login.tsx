@@ -1,59 +1,144 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { Formik } from 'formik';
+import { Link } from 'react-router-dom';
+import * as Yup from 'yup';
+import { loginUser } from '../../api/auth';
+import { useHistory } from 'react-router-dom';
+import { showErrorToast, showSuccessToast } from '../../lib/toastify';
 
 type LoginProps = {
   //
 };
 
-class Login extends Component<LoginProps, any> {
-  public render() {
+const LoginSchema = Yup.object().shape({
+  username: Yup.string().min(2, 'username is Too Short!').max(50, 'username is Too Long!').required('Username is Required'),
+  password: Yup.string().required('Password is required'),
+});
+
+const Login: React.FC<LoginProps | any> = () => {
+  const history = useHistory();
+  const showForm = ({ values, errors, touched, handleChange, handleSubmit, setFieldValue, isSubmitting, handleBlur }: any) => {
     return (
-      <>
-        <div>login</div>
-      </>
-      // <div className="hold-transition login-page">
-      //   <div className="login-box">
-      //     <div className="login-logo">
-      //       <a href="../../index2.html">
-      //         <b>Admin</b>LTE
-      //       </a>
-      //     </div>
-      //     {/* /.login-logo */}
-      //     <div className="card">
-      //       <div className="card-body login-card-body">
-      //         <p className="login-box-msg">Sign in to start your session</p>
-      //         <Formik
-      //           initialValues={{ username: '', password: '' }}
-      //           onSubmit={(values, { setSubmitting }) => {
-      //             this.props.login(values, this.props.history);
-      //             setSubmitting(false);
-      //           }}
-      //         >
-      //           {/* {this.showForm()}            */}
-      //           {props => this.showForm(props)}
-      //         </Formik>
-      //         <div className="social-auth-links text-center mb-3">
-      //           <p>- OR -</p>
-      //           <a href="#" className="btn btn-block btn-primary">
-      //             <i className="fab fa-facebook mr-2" /> Sign in using Facebook
-      //           </a>
-      //           <a href="#" className="btn btn-block btn-danger">
-      //             <i className="fab fa-google-plus mr-2" /> Sign in using Google+
-      //           </a>
-      //         </div>
-      //         {/* /.social-auth-links */}
-      //         <p className="mb-1">
-      //           <a href="forgot-password.html">I forgot my password</a>
-      //         </p>
-      //         <p className="mb-0">
-      //           <Link to="/register">Register a new membership</Link>
-      //         </p>
-      //       </div>
-      //       {/* /.login-card-body */}
-      //     </div>
-      //   </div>
-      // </div>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group  has-feedback">
+          <input
+            type="text"
+            name="username"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.username}
+            placeholder="Username"
+            className={errors.username && touched.username ? 'form-control is-invalid' : 'form-control'}
+          />
+          {/* <div className="input-group-append">
+            <div className="input-group-text">
+              <span className="fas fa-user"></span>
+            </div>
+          </div> */}
+          {errors.username && touched.username ? (
+            <small id="passwordHelp" className="text-danger">
+              {errors.username}
+            </small>
+          ) : null}
+        </div>
+        <div className="form-group  mb-3 has-feedback">
+          <input
+            type="password"
+            name="password"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.password}
+            placeholder="Password"
+            className={errors.password && touched.password ? 'form-control is-invalid' : 'form-control'}
+          />
+          {/* <div className="input-group-append">
+            <div className="input-group-text">
+              <span className="fas fa-lock"></span>
+            </div>
+          </div> */}
+          {errors.password && touched.password ? (
+            <small id="passwordHelp" className="text-danger">
+              {errors.password}
+            </small>
+          ) : null}
+        </div>
+        <div className="row">
+          <div className="col-8">
+            <div className="icheck-primary">
+              <input type="checkbox" id="remember" />
+              <label htmlFor="remember">Remember Me</label>
+            </div>
+          </div>
+          <div className="col-4">
+            <button type="submit" disabled={isSubmitting} className="btn btn-primary btn-block">
+              Sign In
+            </button>
+          </div>
+        </div>
+      </form>
     );
-  }
-}
+  };
+
+  const submitForm = async (values: any, setSubmitting: any) => {
+    try {
+      const user: Pick<IUser, 'username' | 'password'> = {
+        username: values.username,
+        password: values.password,
+      };
+      const result = await loginUser(user);
+      // console.log(result);
+      setSubmitting(false);
+      if (result.data.result === 'success') {
+        localStorage.setItem('TOKEN_KEY', result.data.token);
+        showSuccessToast(result.data.message);
+        history.push('/dashboard');
+      } else if (result.data.result === 'error') {
+        showErrorToast(result.data.message);
+      }
+    } catch (e) {
+      console.log('error in login', e);
+      showErrorToast(e.toString());
+    }
+  };
+
+  return (
+    <div className="register-page">
+      <div className="register-box">
+        <div className="register-logo">
+          <a href="../../index2.html">
+            <b>Basic</b>POS
+          </a>
+        </div>
+        <div className="card">
+          <div className="card-body register-card-body">
+            <p className="login-box-msg">Sign in to start your session</p>
+
+            <Formik
+              initialValues={{
+                username: '',
+                password: '',
+              }}
+              onSubmit={(values, { setSubmitting }) => {
+                submitForm(values, setSubmitting);
+              }}
+              validationSchema={LoginSchema}
+            >
+              {/* {this.showForm()}            */}
+              {props => showForm(props)}
+            </Formik>
+            <p className="mb-1">
+              <a href="forgot-password.html">I forgot my password</a>
+            </p>
+            <p className="mb-0">
+              <Link to="/register">Register a new membership</Link>
+            </p>
+          </div>
+          {/* /.form-box */}
+        </div>
+        {/* /.card */}
+      </div>
+    </div>
+  );
+};
 
 export default Login;
