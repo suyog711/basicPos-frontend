@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { loginUser } from '../../api/auth';
 import { useHistory } from 'react-router-dom';
 import { showErrorToast, showSuccessToast } from '../../lib/toastify';
+import token from '../../helpers/token';
 
 type LoginProps = {
   //
@@ -89,7 +90,7 @@ const Login: React.FC<LoginProps | any> = () => {
       // console.log(result);
       setSubmitting(false);
       if (result.data.result === 'success') {
-        localStorage.setItem('TOKEN_KEY', result.data.token);
+        token.setToken(result.data.token);
         showSuccessToast(result.data.message);
         history.push('/dashboard');
       } else if (result.data.result === 'error') {
