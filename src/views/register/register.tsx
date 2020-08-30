@@ -4,7 +4,6 @@ import * as Yup from 'yup';
 import { registerUser } from '../../api/auth';
 import { useHistory } from 'react-router-dom';
 import { showSuccessToast, showErrorToast } from '../../lib/toastify';
-import { toast } from 'react-toastify';
 type RegisterProps = {
   //
 };
@@ -112,9 +111,9 @@ const Register: React.FC<RegisterProps | any> = () => {
     };
     try {
       const result = await registerUser(newUser);
-      setSubmitting(false);
       if (result.data.result === 'success') {
         showSuccessToast(result.data.message);
+        setSubmitting(false);
         history.push('/login');
       } else if (result.data.result === 'error') {
         showErrorToast(result.data.message);
@@ -144,6 +143,7 @@ const Register: React.FC<RegisterProps | any> = () => {
               }}
               onSubmit={async (values, { setSubmitting }) => {
                 // console.log(values);
+                setSubmitting(true);
                 submitForm(values, setSubmitting);
               }}
               validationSchema={SignupSchema}

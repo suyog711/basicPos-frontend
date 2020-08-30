@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Dashboard from '../views/dashboard';
-import Register from '../views/register';
 import { Switch, Route } from 'react-router-dom';
 import Header from '../components/header';
 import Sidebar from '../components/sidebar';
 import Footer from '../components/footer';
-import Profile from 'views/profile';
+import Profile from './../views/profile';
 
 const ProtectedRoutes = () => {
   return (

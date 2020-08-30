@@ -13,7 +13,7 @@ const RouterPath: React.FC<Props> = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/login">{token.checkToken() ? <Redirect to="/" /> : <Login />}</Route>
+        <Route path="/login/:notify?">{token.checkToken() ? <Redirect to="/" /> : <Login />}</Route>
         <Route path="/register" component={Register}>
           {token.checkToken() ? <Redirect to="/" /> : <Register />}
         </Route>
