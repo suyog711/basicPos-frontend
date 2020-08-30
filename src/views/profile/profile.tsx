@@ -1,8 +1,9 @@
 import React, { useEffect, useState, ChangeEvent } from 'react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import { getUserProfile, updateUserProfile } from 'api/user';
-import { showSuccessToast, showErrorToast } from 'lib/toastify';
+import { getUserProfile, updateUserProfile } from './../../api/user';
+import { showSuccessToast, showErrorToast } from './../../lib/toastify';
+import token from '../../helpers/token';
 
 type ProfileProps = {
   //
@@ -45,7 +46,7 @@ const Profile: React.FC<any> = () => {
       <div className="text-center">
         <img
           id="avatars"
-          src={values.file_obj != null ? values.file_obj : response.avatars}
+          src={values && values.file_obj != null ? values.file_obj : response && response.avatars}
           className="profile-user-img img-fluid img-circle"
           width={100}
         />
@@ -54,134 +55,136 @@ const Profile: React.FC<any> = () => {
   };
   const showForm = ({ values, errors, touched, handleChange, handleSubmit, onSubmit, isSubmitting, setFieldValue }: any) => {
     return (
-      <form role="form" onSubmit={handleSubmit}>
-        {showPreviewImage(values)}
-        <div className="card-body">
-          {/* <span style={{ color: '#00B0CD', marginLeft: 10 }}>Add Picture</span> */}
-          <div className="form-group">
-            <label htmlFor="exampleInputFile">Avatar upload</label>
-            <div className="input-group">
-              <div className="custom-file">
-                <input
-                  type="file"
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    e.preventDefault();
-                    if (e.target && e.target.files) {
-                      setFieldValue('avatars', e.target.files[0]); // for upload
-                      setFieldValue('file_obj', URL.createObjectURL(e.target.files[0])); // for preview image
-                    }
-                  }}
-                  name="avatars"
-                  // className={errors.email && touched.email ? 'form-control is-invalid' : 'form-control'}
-                  accept="image/*"
-                  id="avatars"
-                  className="custom-file-input"
-                  // id="exampleInputFile"
-                />
-                <label className="custom-file-label" htmlFor="exampleInputFile">
-                  Choose file
-                </label>
+      <>
+        <form role="form" onSubmit={handleSubmit}>
+          {showPreviewImage(values)}
+          <div className="card-body">
+            {/* <span style={{ color: '#00B0CD', marginLeft: 10 }}>Add Picture</span> */}
+            <div className="form-group">
+              <label htmlFor="exampleInputFile">Avatar upload</label>
+              <div className="input-group">
+                <div className="custom-file">
+                  <input
+                    type="file"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      e.preventDefault();
+                      if (e.target && e.target.files) {
+                        setFieldValue('avatars', e.target.files[0]); // for upload
+                        setFieldValue('file_obj', URL.createObjectURL(e.target.files[0])); // for preview image
+                      }
+                    }}
+                    name="avatars"
+                    // className={errors.email && touched.email ? 'form-control is-invalid' : 'form-control'}
+                    accept="image/*"
+                    id="avatars"
+                    className="custom-file-input"
+                    // id="exampleInputFile"
+                  />
+                  <label className="custom-file-label" htmlFor="exampleInputFile">
+                    Choose file
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
 
-          <input type="hidden" name="id" value={values._id} />
-          <div className="form-group  has-feedback">
-            <label htmlFor="email">Email address</label>
-            <input
-              onChange={handleChange}
-              value={values.email}
-              type="email"
-              className={errors.email && touched.email ? 'form-control is-invalid' : 'form-control'}
-              id="email"
-              placeholder="Enter email"
-            />
-            {errors.email && touched.email ? (
-              <small id="passwordHelp" className="text-danger">
-                {errors.email}
-              </small>
-            ) : null}
+            {/* <input type="hidden" name="id" value={values._id} /> */}
+            <div className="form-group  has-feedback">
+              <label htmlFor="email">Email address</label>
+              <input
+                onChange={handleChange}
+                value={values.email}
+                type="email"
+                className={errors.email && touched.email ? 'form-control is-invalid' : 'form-control'}
+                id="email"
+                placeholder="Enter email"
+              />
+              {errors.email && touched.email ? (
+                <small id="passwordHelp" className="text-danger">
+                  {errors.email}
+                </small>
+              ) : null}
+            </div>
+            <div className="form-group has-feedback">
+              <label htmlFor="username">Username</label>
+              <input
+                onChange={handleChange}
+                value={values.username}
+                type="text"
+                className={errors.username && touched.username ? 'form-control is-invalid' : 'form-control'}
+                id="username"
+                placeholder="Enter UserName"
+              />
+              <label htmlFor="username">First Name</label>
+              <input
+                onChange={handleChange}
+                value={values.firstName}
+                type="text"
+                className={errors.firstName && touched.firstName ? 'form-control is-invalid' : 'form-control'}
+                id="firstName"
+                placeholder="Enter First Name"
+              />
+              {errors.firstName && touched.firstName ? (
+                <small id="passwordHelp" className="text-danger">
+                  {errors.firstName}
+                </small>
+              ) : null}
+            </div>
+            <div className="form-group has-feedback">
+              <label htmlFor="lastName">Last Name</label>
+              <input
+                onChange={handleChange}
+                value={values.lastName}
+                type="text"
+                className={errors.lastName && touched.lastName ? 'form-control is-invalid' : 'form-control'}
+                id="lastName"
+                placeholder="Enter Last Name"
+              />
+              {errors.lastName && touched.lastName ? (
+                <small id="passwordHelp" className="text-danger">
+                  {errors.lastName}
+                </small>
+              ) : null}
+            </div>
+            <div className="form-group has-feedback">
+              <label htmlFor="phone">phone number</label>
+              <input
+                onChange={handleChange}
+                value={values.phone}
+                type="text"
+                className={errors.phone && touched.phone ? 'form-control is-invalid' : 'form-control'}
+                id="phone"
+                placeholder="Enter phone number"
+              />
+              {errors.phone && touched.phone ? (
+                <small id="passwordHelp" className="text-danger">
+                  {errors.phone}
+                </small>
+              ) : null}
+            </div>
+            <div className="form-group has-feedback">
+              <label htmlFor="address">address</label>
+              <textarea
+                onChange={handleChange}
+                value={values.address}
+                className={errors.address && touched.address ? 'form-control is-invalid' : 'form-control'}
+                id="address"
+                placeholder="Address"
+              />
+              {errors.address && touched.address ? (
+                <small id="passwordHelp" className="text-danger">
+                  {errors.address}
+                </small>
+              ) : null}
+            </div>
           </div>
-          <div className="form-group has-feedback">
-            <label htmlFor="username">Username</label>
-            <input
-              onChange={handleChange}
-              value={values.username}
-              type="text"
-              className={errors.username && touched.username ? 'form-control is-invalid' : 'form-control'}
-              id="username"
-              placeholder="Enter UserName"
-            />
-            <label htmlFor="username">First Name</label>
-            <input
-              onChange={handleChange}
-              value={values.firstName}
-              type="text"
-              className={errors.firstName && touched.firstName ? 'form-control is-invalid' : 'form-control'}
-              id="firstName"
-              placeholder="Enter First Name"
-            />
-            {errors.firstName && touched.firstName ? (
-              <small id="passwordHelp" className="text-danger">
-                {errors.firstName}
-              </small>
-            ) : null}
+          {/* /.card-body */}
+          <div className="card-footer">
+            <button type="submit" disabled={isSubmitting} className="btn btn-block btn-primary">
+              Save
+            </button>
           </div>
-          <div className="form-group has-feedback">
-            <label htmlFor="lastName">Last Name</label>
-            <input
-              onChange={handleChange}
-              value={values.lastName}
-              type="text"
-              className={errors.lastName && touched.lastName ? 'form-control is-invalid' : 'form-control'}
-              id="lastName"
-              placeholder="Enter Last Name"
-            />
-            {errors.lastName && touched.lastName ? (
-              <small id="passwordHelp" className="text-danger">
-                {errors.lastName}
-              </small>
-            ) : null}
-          </div>
-          <div className="form-group has-feedback">
-            <label htmlFor="phone">phone number</label>
-            <input
-              onChange={handleChange}
-              value={values.phone}
-              type="text"
-              className={errors.phone && touched.phone ? 'form-control is-invalid' : 'form-control'}
-              id="phone"
-              placeholder="Enter phone number"
-            />
-            {errors.phone && touched.phone ? (
-              <small id="passwordHelp" className="text-danger">
-                {errors.phone}
-              </small>
-            ) : null}
-          </div>
-          <div className="form-group has-feedback">
-            <label htmlFor="address">address</label>
-            <textarea
-              onChange={handleChange}
-              value={values.address}
-              className={errors.address && touched.address ? 'form-control is-invalid' : 'form-control'}
-              id="address"
-              placeholder="Address"
-            />
-            {errors.address && touched.address ? (
-              <small id="passwordHelp" className="text-danger">
-                {errors.address}
-              </small>
-            ) : null}
-          </div>
-        </div>
-        {/* /.card-body */}
-        <div className="card-footer">
-          <button type="submit" disabled={isSubmitting} className="btn btn-block btn-primary">
-            Save
-          </button>
-        </div>
-      </form>
+        </form>
+      </>
     );
   };
 
@@ -201,7 +204,6 @@ const Profile: React.FC<any> = () => {
   };
 
   return (
-    // <div>profile</div>
     <div className="content-wrapper">
       <section className="content-header">
         <div className="container-fluid">
@@ -228,7 +230,9 @@ const Profile: React.FC<any> = () => {
                 {/* form start */}
                 <Formik
                   enableReinitialize={true}
-                  initialValues={response}
+                  initialValues={
+                    response ? response : { _id: '', username: '', email: '', firstName: '', lastName: '', phone: '', address: '', avatars: '' }
+                  }
                   onSubmit={(values, { setSubmitting }) => {
                     let formData = new FormData();
                     formData.append('_id', values._id);

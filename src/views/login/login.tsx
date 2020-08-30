@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Formik } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { loginUser } from '../../api/auth';
 import { useHistory } from 'react-router-dom';
@@ -18,6 +18,18 @@ const LoginSchema = Yup.object().shape({
 
 const Login: React.FC<LoginProps | any> = () => {
   const history = useHistory();
+  const { notify } = useParams();
+  useEffect(() => {
+    console.log('notify', notify);
+    if (notify) {
+      if (notify == 'error') {
+        showErrorToast('Activation Fail please try again !');
+      } else if (notify == 'success') {
+        showSuccessToast('Activation Success you can login!');
+      }
+    }
+  }, []);
+
   const showForm = ({ values, errors, touched, handleChange, handleSubmit, setFieldValue, isSubmitting, handleBlur }: any) => {
     return (
       <form onSubmit={handleSubmit}>
@@ -31,11 +43,11 @@ const Login: React.FC<LoginProps | any> = () => {
             placeholder="Username"
             className={errors.username && touched.username ? 'form-control is-invalid' : 'form-control'}
           />
-          {/* <div className="input-group-append">
+          <div className="input-group-append">
             <div className="input-group-text">
               <span className="fas fa-user"></span>
             </div>
-          </div> */}
+          </div>
           {errors.username && touched.username ? (
             <small id="passwordHelp" className="text-danger">
               {errors.username}
@@ -52,11 +64,11 @@ const Login: React.FC<LoginProps | any> = () => {
             placeholder="Password"
             className={errors.password && touched.password ? 'form-control is-invalid' : 'form-control'}
           />
-          {/* <div className="input-group-append">
+          <div className="input-group-append">
             <div className="input-group-text">
               <span className="fas fa-lock"></span>
             </div>
-          </div> */}
+          </div>
           {errors.password && touched.password ? (
             <small id="passwordHelp" className="text-danger">
               {errors.password}
@@ -90,7 +102,7 @@ const Login: React.FC<LoginProps | any> = () => {
       // console.log(result);
       setSubmitting(false);
       if (result.data.result === 'success') {
-        token.setToken(result.data.token);
+        await token.setToken(result.data.token);
         showSuccessToast(result.data.message);
         history.push('/dashboard');
       } else if (result.data.result === 'error') {
@@ -99,6 +111,7 @@ const Login: React.FC<LoginProps | any> = () => {
     } catch (e) {
       console.log('error in login', e);
       showErrorToast(e.toString());
+      setSubmitting(false);
     }
   };
 
@@ -128,7 +141,7 @@ const Login: React.FC<LoginProps | any> = () => {
               {props => showForm(props)}
             </Formik>
             <p className="mb-1">
-              <a href="forgot-password.html">I forgot my password</a>
+              <Link to="/forgotpassword">I forgot my password</Link>
             </p>
             <p className="mb-0">
               <Link to="/register">Register a new membership</Link>

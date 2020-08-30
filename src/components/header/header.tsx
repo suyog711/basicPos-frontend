@@ -10,10 +10,10 @@ type HeaderProps = {
 const Header: React.FC<HeaderProps | any> = () => {
   const history = useHistory();
 
-  const logout = () => {
-    token.removeToken();
+  const logout = async () => {
+    await token.removeToken();
     showSuccessToast('Logout Successfully');
-    history.push('/login');
+    window.location.reload();
   };
 
   return (
@@ -64,9 +64,9 @@ const Header: React.FC<HeaderProps | any> = () => {
               <i className="fas fa-user-alt mr-2" /> Update Profile
             </Link>
             <div className="dropdown-divider" />
-            <a href="#" onClick={logout} className="dropdown-item">
+            <span style={{ cursor: 'pointer' }} onClick={logout} className="dropdown-item">
               <i className="fas fa-sign-out-alt mr-2" /> Logout
-            </a>
+            </span>
           </div>
         </li>
       </ul>
