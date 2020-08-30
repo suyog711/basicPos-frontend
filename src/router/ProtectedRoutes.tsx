@@ -5,28 +5,19 @@ import { Switch, Route } from 'react-router-dom';
 import Header from '../components/header';
 import Sidebar from '../components/sidebar';
 import Footer from '../components/footer';
-
-// const StaffRouterDefs = () => {
-//   return (
-//     <Switch>
-//       <Route path="/settings" component={EmailSettingsContainer} />
-//       <Route path="/error_logs" component={ErrorLog} />
-//       <Route exact path="/" component={FlaggedBookingsContainer} />
-//       <Route component={Error404} />
-//     </Switch>
-//   );
-// };
+import Profile from 'views/profile';
 
 const ProtectedRoutes = () => {
   return (
     <Switch>
-      <div>
+      <>
         <Header />
         <Sidebar />
+        <Route path="/profile" component={Profile} />
         <Route path="/dashboard" component={Dashboard} />
         <Route exact path="/" component={Dashboard} />
         <Footer />
-      </div>
+      </>
     </Switch>
   );
 };

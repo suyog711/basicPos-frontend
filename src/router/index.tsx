@@ -3,7 +3,7 @@ import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom';
 // import ProtectedRoutes from './ProtectedRoutes';
 import SecuredRoutes from './SecuredRoutes';
 import Login from '../views/login';
-import checkLogin from '../helpers/checkLogin';
+import token from '../helpers/token';
 import ProtectedRoutes from './ProtectedRoutes';
 import Register from '../views/register';
 
@@ -13,9 +13,9 @@ const RouterPath: React.FC<Props> = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/login">{checkLogin() ? <Redirect to="/" /> : <Login />}</Route>
+        <Route path="/login">{token.checkToken() ? <Redirect to="/" /> : <Login />}</Route>
         <Route path="/register" component={Register}>
-          {checkLogin() ? <Redirect to="/" /> : <Register />}
+          {token.checkToken() ? <Redirect to="/" /> : <Register />}
         </Route>
         <SecuredRoutes path="/" component={ProtectedRoutes} />
       </Switch>

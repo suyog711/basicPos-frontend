@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import checkLogin from '../helpers/checkLogin';
+import token from '../helpers/token';
 
 const SecuredRoutes = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
       render={props =>
-        checkLogin() ? (
+        token.checkToken() ? (
           <React.Fragment>
             <Component />
           </React.Fragment>

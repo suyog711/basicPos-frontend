@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { showSuccessToast } from '../../lib/toastify';
+import token from '../../helpers/token';
 
 type HeaderProps = {
   //
@@ -10,7 +11,7 @@ const Header: React.FC<HeaderProps | any> = () => {
   const history = useHistory();
 
   const logout = () => {
-    localStorage.removeItem('TOKEN_KEY');
+    token.removeToken();
     showSuccessToast('Logout Successfully');
     history.push('/login');
   };
@@ -63,7 +64,7 @@ const Header: React.FC<HeaderProps | any> = () => {
               <i className="fas fa-user-alt mr-2" /> Update Profile
             </Link>
             <div className="dropdown-divider" />
-            <a href="javascript:;" onClick={logout} className="dropdown-item">
+            <a href="#" onClick={logout} className="dropdown-item">
               <i className="fas fa-sign-out-alt mr-2" /> Logout
             </a>
           </div>
