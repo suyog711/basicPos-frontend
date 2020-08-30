@@ -111,9 +111,10 @@ const Register: React.FC<RegisterProps | any> = () => {
     };
     try {
       const result = await registerUser(newUser);
+      console.log('result register', result);
+      setSubmitting(false);
       if (result.data.result === 'success') {
         showSuccessToast(result.data.message);
-        setSubmitting(false);
         history.push('/login');
       } else if (result.data.result === 'error') {
         showErrorToast(result.data.message);
@@ -121,6 +122,7 @@ const Register: React.FC<RegisterProps | any> = () => {
     } catch (e) {
       console.log('error in register', e);
       showErrorToast(e.toString());
+      setSubmitting(false);
     }
   };
   return (
@@ -141,9 +143,8 @@ const Register: React.FC<RegisterProps | any> = () => {
                 password: '',
                 confirm_password: '',
               }}
-              onSubmit={async (values, { setSubmitting }) => {
+              onSubmit={(values, { setSubmitting }) => {
                 // console.log(values);
-                setSubmitting(true);
                 submitForm(values, setSubmitting);
               }}
               validationSchema={SignupSchema}

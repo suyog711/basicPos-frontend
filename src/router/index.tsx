@@ -6,6 +6,8 @@ import Login from '../views/login';
 import token from '../helpers/token';
 import ProtectedRoutes from './ProtectedRoutes';
 import Register from '../views/register';
+import PasswordReset from '../views/passwordReset';
+import PasswordForgot from '../views/passwordForgot';
 
 interface Props {}
 
@@ -17,6 +19,8 @@ const RouterPath: React.FC<Props> = () => {
         <Route path="/register" component={Register}>
           {token.checkToken() ? <Redirect to="/" /> : <Register />}
         </Route>
+        <Route path="/resetpassword/:token" component={PasswordReset} />
+        <Route path="/forgotpassword" component={PasswordForgot} />
         <SecuredRoutes path="/" component={ProtectedRoutes} />
       </Switch>
     </BrowserRouter>

@@ -111,6 +111,7 @@ const Login: React.FC<LoginProps | any> = () => {
     } catch (e) {
       console.log('error in login', e);
       showErrorToast(e.toString());
+      setSubmitting(false);
     }
   };
 
@@ -140,7 +141,7 @@ const Login: React.FC<LoginProps | any> = () => {
               {props => showForm(props)}
             </Formik>
             <p className="mb-1">
-              <a href="forgot-password.html">I forgot my password</a>
+              <Link to="/forgotpassword">I forgot my password</Link>
             </p>
             <p className="mb-0">
               <Link to="/register">Register a new membership</Link>
