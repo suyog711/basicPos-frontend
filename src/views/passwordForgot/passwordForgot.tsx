@@ -65,9 +65,9 @@ const PasswordForgot: React.FC<any> = () => {
     <div className="login-page">
       <div className="login-box">
         <div className="login-logo">
-          <a href="#">
-            <b>Basic</b>POS
-          </a>
+          {/* <a href="#"> */}
+          <b>Basic</b>POS
+          {/* </a> */}
         </div>
         {/* /.login-logo */}
         <div className="card">

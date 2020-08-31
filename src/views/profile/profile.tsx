@@ -3,7 +3,6 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { getUserProfile, updateUserProfile } from './../../api/user';
 import { showSuccessToast, showErrorToast } from './../../lib/toastify';
-import token from '../../helpers/token';
 
 type ProfileProps = {
   //
@@ -45,6 +44,7 @@ const Profile: React.FC<any> = () => {
     return (
       <div className="text-center">
         <img
+          alt="profile"
           id="avatars"
           src={values && values.file_obj != null ? values.file_obj : response && response.avatars}
           className="profile-user-img img-fluid img-circle"
@@ -56,7 +56,7 @@ const Profile: React.FC<any> = () => {
   const showForm = ({ values, errors, touched, handleChange, handleSubmit, onSubmit, isSubmitting, setFieldValue }: any) => {
     return (
       <>
-        <form role="form" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           {showPreviewImage(values)}
           <div className="card-body">
             {/* <span style={{ color: '#00B0CD', marginLeft: 10 }}>Add Picture</span> */}

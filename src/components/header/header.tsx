@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { showSuccessToast } from '../../lib/toastify';
 import token from '../../helpers/token';
 
@@ -8,8 +9,6 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps | any> = () => {
-  const history = useHistory();
-
   const logout = async () => {
     await token.removeToken();
     showSuccessToast('Logout Successfully');

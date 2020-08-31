@@ -22,12 +22,13 @@ const Login: React.FC<LoginProps | any> = () => {
   useEffect(() => {
     console.log('notify', process.env);
     if (notify) {
-      if (notify == 'error') {
+      if (notify === 'error') {
         showErrorToast('Activation Fail please try again !');
-      } else if (notify == 'success') {
+      } else if (notify === 'success') {
         showSuccessToast('Activation Success you can login!');
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const showForm = ({ values, errors, touched, handleChange, handleSubmit, setFieldValue, isSubmitting, handleBlur }: any) => {

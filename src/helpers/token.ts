@@ -1,5 +1,3 @@
-import { string } from 'yup';
-
 const checkToken = () => {
   return localStorage.getItem('TOKEN_KEY') != null;
 };
