@@ -20,7 +20,7 @@ const Login: React.FC<LoginProps | any> = () => {
   const history = useHistory();
   const { notify } = useParams();
   useEffect(() => {
-    console.log('notify', notify);
+    console.log('notify', process.env);
     if (notify) {
       if (notify == 'error') {
         showErrorToast('Activation Fail please try again !');
